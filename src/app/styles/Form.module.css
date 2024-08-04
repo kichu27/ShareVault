@@ -1,0 +1,91 @@
+.formcontainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+  }
+  
+  
+  .label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .input {
+    width: 200px;
+    padding: 10px 30px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    width: 250px;
+    background-color: rgb(239, 239, 239);
+    color: black;
+  }
+
+  .button 
+   {
+   background-color: inherit;
+    color: rgb(255, 255, 255);
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    width: 150px; 
+    background-color: rgb(255, 53, 53);
+  
+  }
+  
+ 
+
+
+
+
+  
+
+
+  .Mainbox{
+
+
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+
+  }
+
+  .title{
+
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+
+
+  }
+
+  .inputs{
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+
+  }
+
+  .subtext{
+    font-family: Arial, Helvetica, sans-serif;
+font-size: small;
+cursor: pointer;
+  }
+
+  .accounts{
+
+cursor: pointer;
+
+
+  }

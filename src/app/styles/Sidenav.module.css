@@ -1,0 +1,64 @@
+.maindiv{
+
+  background-color: rgb(247, 241, 241);
+  height: 97vh;
+width: 200px;
+border-top-right-radius: 40px ;
+border-bottom-right-radius: 40px ;
+
+}
+
+
+  .navList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin-top: 80px;
+  
+  }
+  
+  .navItem {
+    margin-bottom: 25px;
+    
+  }
+  
+  .navLink {
+    text-decoration: none;
+    color: #0c0c0c;
+font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 16px;
+    display: block;
+    padding: 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+    margin-left: 40px;
+  }
+  
+  .navLinkContainer:hover {
+    background-color: #ffffff;
+    color: #000000;
+    border-top-right-radius: 0px ;
+border-bottom-right-radius: 0px ;
+
+  }
+  
+  .navLinkContainer{
+display: flex;
+flex-direction: row;
+justify-content: left;
+width: 300px;
+align-items: center;
+
+  }
+
+
+  .image{
+
+margin-left: 30px;
+
+
+  }
