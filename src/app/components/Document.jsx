@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import style from "@/app/styles/Document.module.css";
 import Button2 from './Button2';
@@ -10,7 +10,23 @@ import { useRouter } from 'next/navigation';
 const Document = ({ name, size, type, deleteItem, imgUrl, setShowModal, setDocUrl }) => {
   const { data: session } = useSession();
   const router = useRouter();
-  
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      if (session?.user?.email) {
+        try {
+          const response = await axios.post('/api/USERS/getid', { email: session.user.email });
+          setUserId(response.data.id);
+        } catch (error) {
+          console.error('Failed to fetch user ID:', error);
+        }
+      }
+    };
+
+    fetchUserId();
+  }, [session?.user?.email]);
+
   const handleDownload = async () => {
     try {
       const response = await fetch(imgUrl);
@@ -29,15 +45,15 @@ const Document = ({ name, size, type, deleteItem, imgUrl, setShowModal, setDocUr
   };
 
   const addToFav = async (imgUrl) => {
-    if (!session) {
-      console.error("User not authenticated");
+    if (!userId) {
+      console.error("User ID not available");
       return;
     }
 
     try {
       const object = {
         imgurl: imgUrl,
-        id: session.user.id,
+        id: userId,
         name: name,
         size: size,
         type: type,

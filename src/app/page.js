@@ -1,25 +1,43 @@
 "use client";
-import React, { useEffect } from "react";
-import { motion, useAnimation, useInView } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import Hero from "./components/Hero";
 import Header from "./components/Header";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Hero2 from "./components/Hero2";
 import Hero3 from "./components/Hero3";
+import axios from 'axios';
 
 export default function Page() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    if (status === "loading") return;
-    if (!session) {
-      router.push("/");
-    } else {
-      router.push(`/dashboard/${session.user.id}`);
-    }
+    const fetchUserId = async () => {
+      if (status === 'loading') return;
+
+      if (session?.user?.email) {
+        try {
+          const response = await axios.post('/api/USERS/getid', { email: session.user.email });
+          setUserId(response.data.id);
+        } catch (error) {
+          console.error('Failed to get user ID:', error);
+        }
+      } else {
+        router.push('/');
+      }
+    };
+
+    fetchUserId();
   }, [session, status, router]);
+
+  useEffect(() => {
+    if (userId) {
+      router.push(`/dashboard/${userId}`);
+    }
+  }, [userId, router]);
 
   // Animation settings
   const animationVariants = {
@@ -31,7 +49,7 @@ export default function Page() {
   const useOnScreen = (options) => {
     const ref = React.useRef();
     const [isVisible, setIsVisible] = React.useState(false);
-  
+
     const observer = React.useMemo(
       () =>
         new IntersectionObserver(
@@ -40,7 +58,7 @@ export default function Page() {
         ),
       [options]
     );
-  
+
     React.useEffect(() => {
       if (ref.current) {
         observer.observe(ref.current);

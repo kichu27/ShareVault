@@ -9,6 +9,7 @@ import { useSession } from 'next-auth/react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from '../../styles/Resize.module.css';
+import axios from 'axios';
 
 const ResizePage = ({ params }) => {
   const router = useRouter();
@@ -27,16 +28,32 @@ const ResizePage = ({ params }) => {
     MPSC: { width: 800, height: 800, maxSizeKB: 650 }
   });
   const [selectedPreset, setSelectedPreset] = useState('NEET');
+  const [userId, setUserId] = useState(null);
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    if (id) {
+    const fetchUserId = async () => {
+      if (session?.user?.email) {
+        try {
+          const response = await axios.post('/api/USERS/getid', { email: session.user.email });
+          setUserId(response.data.id);
+        } catch (error) {
+          console.error('Failed to fetch user ID:', error);
+        }
+      }
+    };
+
+    fetchUserId();
+  }, [session?.user?.email]);
+
+  useEffect(() => {
+    if (userId && id) {
       const decodedUrl = decodeURIComponent(id);
       setFileUrl(decodedUrl);
 
       const fetchMetadata = async () => {
         try {
-          const metadataRef = ref(storage, `${session.user.id}/${decodeURIComponent(id)}`);
+          const metadataRef = ref(storage, `${userId}/${decodeURIComponent(id)}`);
           const metadata = await getMetadata(metadataRef);
 
           if (metadata.contentType === 'application/pdf') {
@@ -49,7 +66,7 @@ const ResizePage = ({ params }) => {
 
       fetchMetadata();
     }
-  }, [id, session]);
+  }, [userId, id]);
 
   useEffect(() => {
     if (selectedPreset && presets[selectedPreset]) {
@@ -61,7 +78,7 @@ const ResizePage = ({ params }) => {
   }, [selectedPreset, presets]);
 
   const handleCompressImage = async () => {
-    if (!fileUrl) return;
+    if (!fileUrl || !userId) return;
 
     try {
       if (pdfPreviewUrl) {
@@ -87,12 +104,12 @@ const ResizePage = ({ params }) => {
       const compressedUrl = URL.createObjectURL(compressedFile);
       setCompressedImageUrl(compressedUrl);
 
-      const storageRef = ref(storage, `${session.user.id}/${imageName}`);
+      const storageRef = ref(storage, `${userId}/${imageName}`);
       await uploadBytes(storageRef, compressedFile);
       const downloadUrl = await getDownloadURL(storageRef);
 
       toast.success('Compressed Image uploaded successfully!');
-      router.push(`/dashboard/${session.user.id}`);
+      router.push(`/dashboard/${userId}`);
     } catch (error) {
       console.error('Error compressing the image:', error);
       toast.error('Error compressing the image');
@@ -120,7 +137,6 @@ const ResizePage = ({ params }) => {
         )}
       </div>
       <div className={styles.container2}>
-
         <div className={styles.inputGroup}>
           <label>Width (px):</label>
           <input
@@ -128,7 +144,7 @@ const ResizePage = ({ params }) => {
             value={width}
             onChange={(e) => setWidth(e.target.value)}
             placeholder="Width"
-            className = {styles.input}
+            className={styles.input}
           />
           <label>Height (px):</label>
           <input
@@ -136,7 +152,7 @@ const ResizePage = ({ params }) => {
             value={height}
             onChange={(e) => setHeight(e.target.value)}
             placeholder="Height"
-            className = {styles.input}
+            className={styles.input}
           />
           <label>Size (KB):</label>
           <input
@@ -144,16 +160,15 @@ const ResizePage = ({ params }) => {
             value={maxSizeKB}
             onChange={(e) => setMaxSizeKB(e.target.value)}
             placeholder="Size (KB)"
-            className = {styles.input}
+            className={styles.input}
           />
           <label>FileName:</label>
-
           <input
             type="text"
             value={imageName}
             onChange={(e) => setImageName(e.target.value)}
             placeholder="Image Name"
-            className = {styles.input}
+            className={styles.input}
           />
         </div>
         <button className={styles.button} onClick={handleCompressImage}>Compress Image</button>
@@ -163,5 +178,3 @@ const ResizePage = ({ params }) => {
 };
 
 export default ResizePage;
-
-  

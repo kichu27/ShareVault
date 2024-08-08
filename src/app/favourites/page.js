@@ -14,55 +14,75 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Search3 from '../components/Search3';
 
-const DashboardPage = ({ params }) => {
+// Function to get ID based on email
+async function getId(email) {
+  try {
+    const response = await axios.post('/api/USERS/getid', { email });
+    const id = response.data.id; // Adjust based on your API response structure
+    return id;
+  } catch (error) {
+    console.error('Failed to get ID:', error);
+    throw error; 
+  }
+}
+
+const Favorites = () => {
   const [showModal, setShowModal] = useState(false);
   const [docUrl, setDocUrl] = useState(null);
   const [metadata, setMetadata] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [id, setId] = useState(null);
+  
   const closeModal = () => setShowModal(false);
   const handleCloseButton = (
     <Image 
-        className={headerstyle.logo} 
-        src="/close.png" 
-        height={40} 
-        width={40} 
-        alt="close"  
-        onClick={closeModal} 
+      className={headerstyle.logo} 
+      src="/close.png" 
+      height={40} 
+      width={40} 
+      alt="close"  
+      onClick={closeModal} 
     />
   );
 
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [userData, setUserData] = useState(null);
-  const [id, setId] = useState(null);
 
   useEffect(() => {
-    if (status === 'loading') return;
+    const fetchId = async () => {
+      if (status === 'loading') return;
 
-    if (!session) {
-      router.push('/');
-      return;
-    }
-console.log("ID FROM FAVOURITES" ,session , session.user)
-    setId(session.user.id);
-    console.log("id from fav is"  , id)
-  }, [session, status, router, params.id]);
+      if (!session) {
+        router.push('/');
+        return;
+      }
 
-  useEffect(() => {
-    const fetchUserData = async () => {
       try {
-        const response = await axios.post('/api/USERS/user', { id });
-        if (response.data.data) {
-          setUserData(response.data.data);
-        }
-        console.log(userData);
+        const fetchedId = await getId(session.user.email);
+        setId(fetchedId);
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error('Error fetching ID:', error);
       }
     };
 
-    if (id) {
-      fetchUserData();
-    }
+    fetchId();
+  }, [session, status, router]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (id) {
+        try {
+          const response = await axios.post('/api/USERS/user', { id });
+          if (response.data.data) {
+            setUserData(response.data.data);
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      }
+    };
+
+    fetchUserData();
   }, [id]);
 
   const refetchUserData = async () => {
@@ -149,4 +169,4 @@ console.log("ID FROM FAVOURITES" ,session , session.user)
   );
 };
 
-export default DashboardPage;
+export default Favorites;
