@@ -47,7 +47,9 @@ const DashboardPage = ({ params }) => {
       return;
     }
 
-    setId(params.id);
+    const userId = session.user.id;
+    console.log("user id from dashboard/id" , userId , session.user.id , session) 
+    setId(userId); 
   }, [session, status, router, params.id]);
 
   useEffect(() => {

@@ -42,8 +42,9 @@ const DashboardPage = ({ params }) => {
       router.push('/');
       return;
     }
-
+console.log("ID FROM FAVOURITES" ,session , session.user)
     setId(session.user.id);
+    console.log("id from fav is"  , id)
   }, [session, status, router, params.id]);
 
   useEffect(() => {

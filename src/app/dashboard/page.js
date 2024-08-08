@@ -7,13 +7,14 @@ import { useEffect } from 'react';
 const Dashboard = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
-console.log("session" , session)
+  
   useEffect(() => {
     if (status === 'loading') return;
     if (!session) {
       router.push('/');
-    } else {
-      router.push(`/dashboard/${session.user.id}`);
+    } else if (session.user?.email) {
+      console.log(session)
+      router.push(`/dashboard/${session.user.email}`);
     }
   }, [session, status, router]);
 

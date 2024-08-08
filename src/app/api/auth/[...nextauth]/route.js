@@ -11,8 +11,8 @@ export const authOptions = {
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: '/dashboard',  // Sign-in page
+  session: {
+    strategy: "jwt",
   },
   callbacks: {
     async jwt({ token, user, account, profile }) {
@@ -20,7 +20,6 @@ export const authOptions = {
         await Connect();
 
         let existingUser = await User.findOne({ email: user.email });
-
         if (!existingUser) {
           existingUser = await User.create({
             email: user.email,
@@ -39,10 +38,13 @@ export const authOptions = {
       return token;
     },
     async session({ session, token }) {
-      session.user.id = token.id;
-      session.user.email = token.email;
-      session.user.username = token.username;
-      session.user.provider = token.provider;
+      session.user = {
+        ...session.user,  // Retain the default fields (name, email, image)
+        id: token.id,
+        username: token.username,
+        provider: token.provider
+      };
+     
       return session;
     },
   },
