@@ -18,7 +18,7 @@ export default function Page() {
     const fetchUserId = async () => {
       if (status === 'loading') return;
 
-      if (session?.user?.email) {
+      if (session === 'authenticated') {
         try {
           const response = await axios.post('/api/USERS/getid', { email: session.user.email });
           setUserId(response.data.id);

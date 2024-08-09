@@ -38,12 +38,14 @@ export const authOptions = {
       return token;
     },
     async session({ session, token }) {
+      console.log("the session  before is " , session)
       session.user = {
         ...session.user,  // Retain the default fields (name, email, image)
         id: token.id,
         username: token.username,
         provider: token.provider
       };
+      console.log("the session  after is " , session)
      
       return session;
     },

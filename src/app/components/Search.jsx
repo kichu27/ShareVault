@@ -4,6 +4,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import style from "@/app/styles/Searchbar.module.css";
 import { useSession } from 'next-auth/react';
+import { refreshSession } from '../Helpers/Session';
 
 const Search = ({ setQuery }) => {
   const [input, setInput] = useState('');
@@ -11,10 +12,17 @@ const Search = ({ setQuery }) => {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    if (session) {
-      setUserData(session.user);
-    }
+    const updateSession = async () => {
+      if (session) {
+        const user = await refreshSession();
+        console.log("user", user);
+        setUserData(user?.user); 
+      }
+    };
+  
+    updateSession();
   }, [session]);
+  
 
   useEffect(() => {
     setQuery(input); // Update the parent query state when input changes

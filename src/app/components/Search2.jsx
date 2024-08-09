@@ -39,18 +39,7 @@ const mainModal = (
   </MyModal1>
 );
 
-  const handleSearch = async () => {
-    if (!query.trim()) return;
 
-    try {
-      const response = await axios.get(`https://api.example.com/search`, {
-        params: { q: query },
-      });
-      setResults(response.data); // Adjust based on your API response
-    } catch (error) {
-      console.error('Error searching:', error);
-    }
-  };
 
   return (
     <div className={style.maindiv}>

@@ -3,6 +3,7 @@ import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { refreshSession } from '../Helpers/Session';
 
 async function getid(email) {
   try {
@@ -14,7 +15,7 @@ async function getid(email) {
     throw error; 
   }
 }
-
+ 
 const Dashboard = () => {
   const [id, setId] = useState(null);
   const { data: session, status } = useSession();
@@ -22,11 +23,16 @@ const Dashboard = () => {
 
 
   useEffect(() => {
- 
+
+   const data = refreshSession() 
+    
+  });
+
+  useEffect(() => {
+
     if (status === 'loading') return;
 
     if (!session) {
-      // Redirect to sign-in page or home if no session
       router.push('/');
       return;
     }
@@ -40,14 +46,12 @@ const Dashboard = () => {
       }
     };
 
-    if (session.user) {
+    if ( status == "authenticated" &&  session.user) {
       fetchId();
     }
   }, [session, status, router]);
 
   useEffect(() => {
-    console.log('ID:', id);
-
     if (id !== null) {
       router.push(`/dashboard/${id}`);
     }
