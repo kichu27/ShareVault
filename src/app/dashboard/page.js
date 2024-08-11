@@ -46,9 +46,9 @@ const Dashboard = () => {
       }
     };
 
-    if ( status == "authenticated" &&  session.user) {
+    
       fetchId();
-    }
+    
   }, [session, status, router]);
 
   useEffect(() => {
