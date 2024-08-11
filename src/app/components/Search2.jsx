@@ -49,7 +49,7 @@ const mainModal = (
       </div>
 
       <div onClick={() => setShowModal(true)} className={style.subdiv2}>
-        <Button2 text="UPLOAD" img="/up-arrow.png"/>
+        <Button2 text="UPLOAD" img="/upload.png"/>
       </div>
       <div id="myPortalModalDiv">
                 {showModal && mainModal}
