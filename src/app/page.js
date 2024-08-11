@@ -14,26 +14,34 @@ export default function Page() {
   const router = useRouter();
   const [userId, setUserId] = useState(null);
 
-  useEffect(() => {
-    const fetchUserId = async () => {
-      if (status === 'loading') return;
+  const fetchUserId = async () => {
+    if (status === 'loading') return;
 
-      if (session?.user?.email) {
-        try {
-          console.log(session)
-          const response = await axios.post('/api/USERS/getid', { email: session.user.email });
-          console.log("response is " , response)
-          setUserId(response.data.id);
-        } catch (error) {
-          console.error('Failed to get user ID:', error);
-        }
-      } else {
-        console.log("pushed to home route")
-        router.push('/');
+    if (session?.user?.email) {
+      try {
+        console.log(session)
+        const response = await axios.post('/api/USERS/getid', { email: session.user.email });
+        console.log("response is ", response)
+        setUserId(response.data.id);
+      } catch (error) {
+        console.error('Failed to get user ID:', error);
       }
-    };
+    } else {
+      console.log("pushed to home route")
+      router.push('/');
+    }
+  };
 
+  useEffect(() => {
     fetchUserId();
+
+    // Set a timeout to fetch user ID again after 5 seconds
+    const timer = setTimeout(() => {
+      fetchUserId();
+    }, 5000);
+
+    // Cleanup the timer
+    return () => clearTimeout(timer);
   }, [session, status, router]);
 
   useEffect(() => {
