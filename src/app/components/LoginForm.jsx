@@ -46,7 +46,7 @@ const LoginForm = ({ setIsSignup }) => {
 
             <div className={Formstyles.accounts}>
                 <Image 
-                    onClick={() => signIn("google", { callbackUrl: 'http://localhost:3000/dashboard' })} 
+                    onClick={() => signIn("google", { callbackUrl: 'https://share-vault-delta.vercel.app/dashboard' })} 
                     src={"/google.png"} 
                     height={40} 
                     width={40} 

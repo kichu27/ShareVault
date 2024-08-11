@@ -18,14 +18,17 @@ export default function Page() {
     const fetchUserId = async () => {
       if (status === 'loading') return;
 
-      if (session === 'authenticated') {
+      if (session?.user?.email) {
         try {
+          console.log(session)
           const response = await axios.post('/api/USERS/getid', { email: session.user.email });
+          console.log("response is " , response)
           setUserId(response.data.id);
         } catch (error) {
           console.error('Failed to get user ID:', error);
         }
       } else {
+        console.log("pushed to home route")
         router.push('/');
       }
     };
@@ -76,7 +79,8 @@ export default function Page() {
   // Usage of custom hook
   const [heroRef, heroInView] = useOnScreen({ threshold: 0.1 });
   const [hero2Ref, hero2InView] = useOnScreen({ threshold: 0.1 });
-  const [hero3Ref, hero3InView] = useOnScreen({ threshold: 0.1 });
+  const [hero3Ref1, hero3InView1] = useOnScreen({ threshold: 0.1 });
+  const [hero3Ref2, hero3InView2] = useOnScreen({ threshold: 0.1 });
 
   return (
     <>
@@ -98,9 +102,9 @@ export default function Page() {
         <Hero2 />
       </motion.div>
       <motion.div
-        ref={hero3Ref}
+        ref={hero3Ref1}
         initial="hidden"
-        animate={hero3InView ? "visible" : "hidden"}
+        animate={hero3InView1 ? "visible" : "hidden"}
         variants={animationVariants}
       >
         <Hero3
@@ -111,9 +115,9 @@ export default function Page() {
         />
       </motion.div>
       <motion.div
-        ref={hero3Ref}
+        ref={hero3Ref2}
         initial="hidden"
-        animate={hero3InView ? "visible" : "hidden"}
+        animate={hero3InView2 ? "visible" : "hidden"}
         variants={animationVariants}
       >
         <Hero3
