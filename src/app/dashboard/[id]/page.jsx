@@ -39,6 +39,17 @@ const DashboardPage = ({ params }) => {
   const [id, setId] = useState(null);
   const [imgList, setImgList] = useState([]);
 
+  useEffect(()=>{
+    console.log("In Admin useeffect !");
+    console.log(userData);
+if(userData && userData.isAdmin){
+  console.log("pushed");
+  router.push("/mainportal")
+}else{
+  console.log("not pushed");
+}
+  } , [userData , router])
+
   useEffect(() => {
     if (status === 'loading') return;
 
@@ -55,6 +66,7 @@ const DashboardPage = ({ params }) => {
       try {
         const response = await axios.post('/api/USERS/user', { id });
         if (response.data.data) {
+          console.log("repsonse data" , response.data.data);
           setUserData(response.data.data);
         }
       } catch (error) {

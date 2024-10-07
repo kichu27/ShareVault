@@ -8,14 +8,14 @@ import 'react-toastify/dist/ReactToastify.css';
 export default async function RootLayout({ children }) {
 
 const session = await getServerSession()
-
+console.log("sexy session" , session);
   return (
     <html lang="en">
 
       
       <body>
         
-         <SessionProvider session={session}>
+         <SessionProvider session={session}> 
          <ToastContainer />
           {children }
           

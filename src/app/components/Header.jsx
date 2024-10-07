@@ -47,7 +47,7 @@ function Header() {
             </div>
             <div className={headerstyle.subdiv2}>
                 <div><Link className={headerstyle.subdiv02} href="/">Home</Link></div>
-                <div><Link className={headerstyle.subdiv02} href="/properties">Portal</Link></div>
+                <div><Link className={headerstyle.subdiv02} href="/portal">Portal</Link></div>
                 <div><Link className={headerstyle.subdiv02} href="https://github.com/kichu27/ShareVault">GitHub</Link></div>
             </div>
             <div className={headerstyle.subdiv3}>

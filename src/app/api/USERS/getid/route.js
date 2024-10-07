@@ -15,7 +15,7 @@ export async function POST(request) {
 
     // Find the user by ID
     const user = await User.find({email :email});
-    console.log(user)
+  
 
     if (!user) {
       return NextResponse.json(

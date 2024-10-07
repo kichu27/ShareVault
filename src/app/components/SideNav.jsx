@@ -23,7 +23,7 @@ const SideNav = () => {
         <li className={sidenavstyles.navItem}>
           <div className={sidenavstyles.navLinkContainer}>
             {/* <Image className={sidenavstyles.image} src="/help.png" height={25} width={25} alt="help"/> */}
-            <a href="#help" className={sidenavstyles.navLink}>Help</a>
+            <a href="/examdocportal" className={sidenavstyles.navLink}>Help</a>
           </div>
         </li>
         <li className={sidenavstyles.navItem}>
